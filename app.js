@@ -19,6 +19,9 @@ server.listen(port, function () {
 app.use(express.static(__dirname + '/public'));
 app.use(express.static(path.join(appDir, 'public')));
 
+app.use('/api/', require('./server/index'));
+
+
 
 app.get('/hi', function (req, res) {
   return res.json({ message: 'Hi' });
@@ -29,3 +32,4 @@ app.get('/*', function (req, res) {
   res.sendFile(appDir + '/public/index.html');
 });
 
+module.exports = app;

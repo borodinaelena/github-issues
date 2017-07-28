@@ -1,0 +1,54 @@
+'use strict';
+
+let express = require('express');
+let router = express.Router();
+let mongoose = require('mongoose');
+let bodyParser = require('body-parser');
+let cookieParser = require('cookie-parser');
+let bcrypt = require('bcryptjs');
+let moment = require('moment');
+let jwt = require('jsonwebtoken');
+let passport = require('passport');
+let BearerStrategy = require('passport-http-bearer');
+let GitHubStrategy = require('passport-github2');
+let http = require('http');
+var request = require('request');
+
+let GithubController = require('./github.controller');
+// let FacebookController = require('./facebook.controller');
+
+router.use(passport.initialize());
+router.use(passport.session());
+
+passport.serializeUser(function (user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function (id, done) {
+  User.findById(id, function (err, user) {
+    done(err, user);
+  });
+});
+
+passport.use(new GitHubStrategy({
+  clientID: '652c14e74cd1be1b0baa',
+  clientSecret: '88605e335aae03374fe3b009eed888eb7cd7545c',
+  callbackURL: "https://d75603ec.ngrok.io/api/social/auth/github/callback"
+},GithubController.getGithubAuth
+));
+
+router.get('/auth/github',
+  passport.authenticate('github', { scope: ['user:email'] }));
+
+router.get('/auth/github/callback',
+  passport.authenticate('github', { failureRedirect: '/forbidden' }),
+  function (req, res) {
+    let expiry = moment().unix() + 3600;
+    var token = jwt.sign({ _id: req.user._id, exp: expiry, type: 0 }, "token");
+    console.log('token', token);
+    res.cookie('token', token);
+    res.redirect('/auth/success')
+  });
+
+
+module.exports = router;
