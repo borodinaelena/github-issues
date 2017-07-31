@@ -14,10 +14,13 @@
 </head>
 
 <body>
+  <div class="header ">
+    <h1 class="inline"> GitHub issues </h1>
+    <a class="pull-right login" href="/api/social/auth/github" target="_self" ng-show="!menu.isAuth"> Login GitHub</a>
+  </div>
 
-  <h1 class="header text-center"> GitHub issues </h1>
 
-  <div class="col-md-4 col-md-offset-4 text-center" ui-view> </div>
+  <div class="col-md-10 col-md-offset-2" ui-view> </div>
 
   <script type="text/javascript" src="/assets/js/vendor.js"></script>
   <!-- inject:js -->

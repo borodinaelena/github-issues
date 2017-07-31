@@ -7,40 +7,29 @@ let bodyParser = require('body-parser');
 let cookieParser = require('cookie-parser');
 let bcrypt = require('bcryptjs');
 
+let User = require('./../../models/users');
+
 
 module.exports = {
   getGithubAuth: function (accessToken, refreshToken, profile, done) {
-    console.log(profile)
-    // var email = profile.id + "@github";
-    // Client.findOne({ githubId: profile.id }, function (err, user) {
-    //   if (user) {
-    //     console.log(err);
-    //     return done(err, user);
-    //   } else {
-    //     console.log('else');
-    //     let newUser = {
-    //       email: email,
-    //       password: profile.id ,
-    //       type: 0,
-    //     }
-    //     Auth.create(newUser)
-    //       .then(function (authClient) {
-    //         let newUser = {
-    //           name: profile._json.login,
-    //           address: 'Не указан',
-    //           phone: 'Не указан',
-    //           discount: 0,
-    //           authId: authClient._id,
-    //           order: null,
-    //           githubId: profile.id
-    //         }
-    //         Client.create(newUser)
-    //           .then(function (user) {
-    //             err = null;
-    //             return done(err, user);
-    //           });
-    //       });
-    //   }
-    // });
+    console.log(profile._json)
+    User.findOne({ githubId: profile.id }, function (err, user) {
+      if (user) {
+        console.log(err);
+        return done(err, user);
+      } else {
+        let newUser = {
+          login: profile._json.login,
+          token: accessToken,
+          githubId: profile.id
+        }
+        console.log(newUser)
+        User.create(newUser)
+          .then(function (user) {
+            err = null;
+            return done(err, user);
+          });
+      }
+    });
   }
 }

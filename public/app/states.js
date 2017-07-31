@@ -6,9 +6,8 @@ angular
       .state({
         name: 'startPage',
         url: '/',
-        template: '<h1> hello </h1>'
-        // templateUrl: '',
-        // controller: 'StartPageController',
-        // controllerAs: 'StartPage',       
+        templateUrl: './app/issues/issues.template.html',
+        controller: 'IssuesController',
+        controllerAs: 'Issues',       
       })
   });

@@ -11,6 +11,13 @@ var port = process.env.PORT || 3000;
 require('./config/mongodb');
 global.appDir = __dirname;
 
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
+
+
 
 server.listen(port, function () {
   console.log('Server listening at port %d', port);
