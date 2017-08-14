@@ -13,8 +13,7 @@ let GitHubStrategy = require('passport-github2');
 let http = require('http');
 var request = require('request');
 
-let GithubController = require('./github.controller');
-// let FacebookController = require('./facebook.controller');
+let GithubController = require('./github.auth.controller');
 let UserController = require('./user.controller');
 
 router.get('/all', UserController.getAllUsers);
@@ -37,21 +36,21 @@ passport.deserializeUser(function (id, done) {
 });
 
 passport.use(new GitHubStrategy({
-  clientID: '652c14e74cd1be1b0baa',
-  clientSecret: '88605e335aae03374fe3b009eed888eb7cd7545c',
-},GithubController.getGithubAuth
+  clientID: '35369240b37657fba828',
+  clientSecret: '4344fbe76ae5c17b6ae64a4237c765a53ed4b816',
+}, GithubController.getGithubAuth
 ));
 
 router.get('/auth/github',
-  passport.authenticate('github', { scope: ['user:email'] }));
+  passport.authenticate('github', { scope: [
+    'read:org',
+    'admin:org' ,
+    'public_repo', 
+  ]}));
 
 router.get('/auth/github/callback',
   passport.authenticate('github', { failureRedirect: '/forbidden' }),
   function (req, res) {
-    let expiry = moment().unix() + 3600;
-    var token = jwt.sign({ _id: req.user._id, exp: expiry, type: 0 }, "token");
-    console.log('token', token);
-    res.cookie('token', token);
     res.redirect('/auth/success')
   });
 

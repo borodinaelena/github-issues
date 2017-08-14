@@ -15,6 +15,7 @@ let moment = require('moment');
 
 // let Auth = require('./../models/auth');
 router.use('/social', require('./auth/index'));
+router.use('/github', require('./github/index'));
 
 router.get('/hi', function (req, res) {
   return res.json({ message: 'Hi' });

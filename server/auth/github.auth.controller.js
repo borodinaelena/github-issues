@@ -15,9 +15,14 @@ module.exports = {
     console.log(profile._json)
     User.findOne({ githubId: profile.id }, function (err, user) {
       if (user) {
-        console.log(err);
-        return done(err, user);
+        User.update({ token: accessToken })
+          .then(function (user) {
+            err = null;
+            return done(err, user);
+          });
+        // return done(err, user);
       } else {
+        console.log("profile", profile);
         let newUser = {
           login: profile._json.login,
           token: accessToken,

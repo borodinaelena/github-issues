@@ -1,29 +1,57 @@
-
 <div class="dropdown inline">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-    Dropdown
-    <span class="caret"></span>
+  <button class="btn btn-default dropdown-toggle userList" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
+    aria-expanded="true">
+    {{Issues.user.login ? Issues.user.login : "Users"}}
+    <span class="caret pull-right"></span>
   </button>
   <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-    <li><a href="#">Action</a></li>
-    <li><a href="#">Another action</a></li>
-    <li><a href="#">Something else here</a></li>
-    <li role="separator" class="divider"></li>
-    <li><a href="#">Separated link</a></li>
+    <li class="list" ng-repeat=" user in Issues.users" ng-click="Issues.checkUser(user._id)"> {{user.login}}</li>
+
   </ul>
 </div>
 
-
 <div class="dropdown inline">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-    Dropdown
-    <span class="caret"></span>
+  <button class="btn btn-default dropdown-toggle userList" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true"
+    aria-expanded="true">
+    {{Issues.repo ? Issues.repo : "All repositories"}}
+    <span class="caret pull-right"></span>
   </button>
   <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-    <li><a href="#">Action</a></li>
-    <li><a href="#">Another action</a></li>
-    <li><a href="#">Something else here</a></li>
-    <li role="separator" class="divider"></li>
-    <li><a href="#">Separated link</a></li>
+    <li class="list" ng-click="Issues.checkRepo('null','all', 'All repositories',true,false)"> All repositories</li>
+    <li class="list" ng-repeat=" repo in Issues.repos" ng-click="Issues.checkRepo(repo.full_name, 'one', repo.name , false,true)">
+      {{repo.name}}</li>
   </ul>
+</div>
+
+<div class="conteiner">
+  <div ng-repeat=" issue in Issues.issues" ng-show="{{Issues.one}}">
+    <button class="btn btn-default issuesList" type="button" ng-click="Issues.checkIssue(issue.id)">
+    {{issue.title}}
+    <span class="caret pull-right"></span>
+    <div class="conteinerIssue" ng-show="Issues.issue==issue.id">
+      {{issue.body}}
+      <br></br>  
+      <ul>
+        <li>  Assignee: {{issue.assignee.login}}</li>
+        <li>  Created at : {{issue.created_at}}</li>
+      </ul>
+    </div>
+  </div>
+
+   <div ng-repeat=" issues in Issues.issues"  ng-show="{{Issues.all}}">
+    <div ng-repeat=" issue in issues"  ng-show="{{Issues.all}}">
+    <button class="btn btn-default issuesList" type="button" ng-click="Issues.checkIssue(issue.id)">
+    {{issue.title}}
+    <span class="caret pull-right"></span>
+    <div class="conteinerIssue" ng-show="Issues.issue==issue.id">
+      {{issue.body}}
+      <br></br>  
+      <ul>
+        <li>  Assignee: {{issue.assignee.login}}</li>
+        <li>  Created at : {{issue.created_at}}</li>
+      </ul>
+    </div>
+  </div>
+  </div>
+
 </div>
